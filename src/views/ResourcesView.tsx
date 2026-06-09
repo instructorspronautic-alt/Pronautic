@@ -251,17 +251,11 @@ export default function ResourcesView(props: any) {
                                       <td className="p-2 text-right">
                                         <button
                                           onClick={() => {
-                                            if (
-                                              confirm(
-                                                `¿Eliminar al instructor ${staff.name}?`,
-                                              )
-                                            ) {
-                                              setStaffDatabase(
-                                                staffDatabase.filter(
-                                                  (s) => s.id !== staff.id,
-                                                ),
-                                              );
-                                            }
+                                            setStaffDatabase(
+                                              staffDatabase.filter(
+                                                (s) => s.id !== staff.id,
+                                              ),
+                                            );
                                           }}
                                           className="text-slate-400 hover:text-rose-500"
                                           title="Eliminar instructor"

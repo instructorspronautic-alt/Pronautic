@@ -101,11 +101,8 @@ export default function AdminResourcesModal({
   };
 
   const handleDeleteAula = (idx: number) => {
-    const spaceName = aulas[idx];
-    if (confirm(`¿Estás seguro de que deseas eliminar el espacio "${spaceName}"?`)) {
-      onUpdateAulas(aulas.filter((_, i) => i !== idx));
-      handleShowFeedback("Espacio eliminado.");
-    }
+    onUpdateAulas(aulas.filter((_, i) => i !== idx));
+    handleShowFeedback("Espacio eliminado.");
   };
 
   // ----- Embarcaciones Handlers -----
@@ -141,20 +138,15 @@ export default function AdminResourcesModal({
   };
 
   const handleDeleteEmbarcacion = (idx: number) => {
-    const boatName = embarcaciones[idx];
-    if (confirm(`¿Estás seguro de que deseas eliminar la embarcación "${boatName}"?`)) {
-      onUpdateEmbarcaciones(embarcaciones.filter((_, i) => i !== idx));
-      handleShowFeedback("Embarcación eliminada.");
-    }
+    onUpdateEmbarcaciones(embarcaciones.filter((_, i) => i !== idx));
+    handleShowFeedback("Embarcación eliminada.");
   };
 
   // ----- Reset Values -----
   const handleRestoreDefaults = () => {
-    if (confirm("¿Estás seguro de restablecer los valores predeterminados de aulas y embarcaciones Pronautic? Esto sustituirá tu configuración actual.")) {
-      onUpdateAulas(DEFAULT_AULAS);
-      onUpdateEmbarcaciones(DEFAULT_EMBARCACIONES);
-      handleShowFeedback("Cargados valores estándar Pronautic.");
-    }
+    onUpdateAulas(DEFAULT_AULAS);
+    onUpdateEmbarcaciones(DEFAULT_EMBARCACIONES);
+    handleShowFeedback("Cargados valores estándar Pronautic.");
   };
 
   return (

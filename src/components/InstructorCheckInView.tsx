@@ -64,8 +64,6 @@ export default function InstructorCheckInView({ events, eventResources = {}, han
   };
 
   const handleMassCheckIn = () => {
-    if (!window.confirm(`¿Estás seguro de marcar como impartidos los ${displayedCourses.length} cursos mostrados?`)) return;
-    
     const now = new Date().toISOString();
     const saved = localStorage.getItem("instructor_checkins") || "{}";
     const metadata = JSON.parse(saved);

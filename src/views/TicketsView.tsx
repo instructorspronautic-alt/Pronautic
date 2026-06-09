@@ -120,13 +120,11 @@ export default function TicketsView(props: any) {
                                 <button
                                   className="text-xs font-bold px-3 py-1 bg-white border border-slate-200 shadow-sm rounded text-rose-600 hover:bg-rose-50"
                                   onClick={() => {
-                                    if (confirm("¿Eliminar este ticket?")) {
-                                      setFeedbackTickets(
-                                        feedbackTickets.filter(
-                                          (x) => x.id !== t.id,
-                                        ),
-                                      );
-                                    }
+                                    setFeedbackTickets(
+                                      feedbackTickets.filter(
+                                        (x) => x.id !== t.id,
+                                      ),
+                                    );
                                   }}
                                 >
                                   Eliminar
