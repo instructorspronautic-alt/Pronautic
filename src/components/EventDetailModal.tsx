@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { CalendarEvent, GoogleTask, StudentInfo, CourseIncident, CourseDocument, CourseAuditLog, CourseNotesData } from "../types";
+import { CalendarEvent, GoogleTask, StudentInfo, CourseIncident, CourseDocument, CourseAuditLog, CourseNotesData, InstructorProfile } from "../types";
 import { 
   X, 
   Clock, 
@@ -86,6 +86,7 @@ interface EventDetailModalProps {
   teacherAvailabilityStatus?: { status: string; label: string };
   aulasList?: string[];
   embarcacionesList?: string[];
+  staffDatabase?: InstructorProfile[];
   userRole?: string;
   userEmail?: string;
 }
@@ -178,6 +179,7 @@ export default function EventDetailModal({
   teacherAvailabilityStatus,
   aulasList = AULAS_DISPONIBLES,
   embarcacionesList = EMBARCACIONES_DISPONIBLES,
+  staffDatabase = [],
   userRole = "admin",
   userEmail = "instructorspronautic@gmail.com"
 }: EventDetailModalProps) {
@@ -421,6 +423,65 @@ MCR: ${mcrCount}
       auditLogs: updatedLogs,
       courseNotes: updatedCourseNotes
     });
+  };
+
+  const parseDescriptionForData = () => {
+    const desc = (editedDescription || event.description || "");
+
+    let fieldsToUpdate: Partial<CourseNotesData> = {};
+    let manualFields: { numAlumnos?: number, instructor?: string, codigo?: string, aula?: string, estado?: string } = {};
+
+    const dgmmMatch = desc.match(/Codigo DGMM:\s*([^\n]+)/i) || desc.match(/Código DGMM:\s*([^\n]+)/i);
+    if (dgmmMatch) manualFields.codigo = dgmmMatch[1].trim();
+
+    const alumnosMatch = desc.match(/Nombre d(?:'|’)alumnes(?: curs complet)?:\s*(\d+)/i) || desc.match(/Nombre d(?:'|’)alumnes:\s*(\d+)/i);
+    if (alumnosMatch) {
+      manualFields.numAlumnos = parseInt(alumnosMatch[1], 10);
+      fieldsToUpdate.nombreAlumnesCurs = manualFields.numAlumnos;
+    }
+
+    const mccMatch = desc.match(/MCC:\s*(\d+)/i);
+    if (mccMatch) fieldsToUpdate.mccCount = parseInt(mccMatch[1], 10);
+    
+    const mcrMatch = desc.match(/MCR:\s*(\d+)/i);
+    if (mcrMatch) fieldsToUpdate.mcrCount = parseInt(mcrMatch[1], 10);
+
+    const dataActualitzacioMatch = desc.match(/Data d(?:'|’)actualitzaci[oó]:\s*([\d/]+)/i);
+    if (dataActualitzacioMatch) fieldsToUpdate.dataActualitzacio = dataActualitzacioMatch[1];
+
+    const insPrinMatch = desc.match(/Instructor principal:[\s\S]*?Nom:\s*([^\n]+)/i);
+    if (insPrinMatch) {
+      const name = insPrinMatch[1].trim();
+      fieldsToUpdate.instructorPrincipalNom = name;
+      manualFields.instructor = name;
+    }
+    
+    const insSecMatch = desc.match(/Instructor secundari.*?:\s*([\s\S]*?)(?:🩺|🔐|👥|📚|CURSOS)/i);
+    if (insSecMatch) {
+       const rawLines = insSecMatch[1];
+       const names = Array.from(rawLines.matchAll(/Nom:\s*([^\n]+)/gi)).map(m => m[1].trim()).join(" | ");
+       if (names) fieldsToUpdate.instructorSecundariNom = names;
+    }
+
+    const aulaMatch = desc.match(/Aula assignada:\s*([^\n]+)/i);
+    if (aulaMatch) {
+      const aulaStr = aulaMatch[1].trim();
+      if (aulaStr.toLowerCase().includes("gran") || aulaStr.toLowerCase().includes("teorica") || aulaStr.toLowerCase().includes("teórica")) {
+         manualFields.aula = "Aula Teórica del Puerto";
+      } else if (aulaStr.toLowerCase().includes("b") || aulaStr.toLowerCase().includes("náutica b")) {
+         manualFields.aula = "Aula Náutica B";
+      } else {
+         manualFields.aula = "Aula de Simulación Práctica"; 
+      }
+    }
+
+    if (manualFields.codigo) setCodigoCurso(manualFields.codigo);
+    if (manualFields.numAlumnos !== undefined) setNumAlumnos(manualFields.numAlumnos);
+    if (manualFields.instructor) setInstructorName(manualFields.instructor);
+    if (manualFields.aula) setSelectedAula(manualFields.aula);
+
+    handleUpdateNoteField(fieldsToUpdate);
+    alert("✨ ¡Datos fácticos extraídos de la Descripción/Notas y mapeados al simulador!");
   };
 
   const addAuditLog = (actionText: string, customLogs?: CourseAuditLog[]) => {
@@ -1299,8 +1360,9 @@ MCR: ${mcrCount}
                 <div className="flex items-center gap-2 text-indigo-900">
                   <FileText className="w-5 h-5 text-indigo-600 animate-pulse" />
                   <div>
-                    <span className="text-xs font-black uppercase tracking-wider block">
+                    <span className="text-xs font-black uppercase tracking-wider block flex items-center gap-2">
                       Ficha de Control Operativo Pronautic
+                      <button onClick={parseDescriptionForData} className="px-2 py-0.5 bg-sky-100 text-sky-700 hover:bg-sky-200 border border-sky-200 shadow-sm rounded flex items-center gap-1 uppercase tracking-wider text-[9px] cursor-pointer" title="Usar Inteligencia Artificial para extraer alumnos, aulas e instructores de las descripciones">🤖 Auto-Completar</button>
                     </span>
                     <span className="text-[10px] text-slate-500 block">
                       Gestión de plantilla y control fáctico para coordinación rápida
@@ -1700,7 +1762,20 @@ MCR: ${mcrCount}
                         Sugerencias de Formadores de Guardia (Click para auto-completar):
                       </span>
                       <div className="flex flex-wrap gap-1.5">
-                        {["Carlos Peralta", "Marta Bosch", "Javier Romero", "Sofía Alcorisa", "Eduardo G."].map((ins) => (
+                        {staffDatabase.length > 0 ? staffDatabase.map((staff) => (
+                          <button
+                            key={staff.id}
+                            type="button"
+                            onClick={() => setInstructorName(staff.name)}
+                            className={`text-[9.5px] font-semibold px-2 py-0.5 rounded-full border transition-all ${
+                              instructorName === staff.name
+                                ? "bg-sky-500 text-slate-950 border-sky-400 font-bold shadow-3xs"
+                                : "bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-550 hover:bg-slate-800"
+                            }`}
+                          >
+                            {staff.name}
+                          </button>
+                        )) : ["Carlos Peralta", "Marta Bosch", "Javier Romero", "Sofía Alcorisa", "Eduardo G."].map((ins) => (
                           <button
                             key={ins}
                             type="button"

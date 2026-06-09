@@ -86,6 +86,16 @@ export interface ScheduleAnalysis {
   fallbackReason?: string;
 }
 
+export interface InstructorProfile {
+  id: string;
+  branca: string;
+  name: string;
+  category: string;
+  phone: string;
+  email: string;
+  location: string;
+}
+
 export interface TeacherAvailability {
   id: string;
   teacherEmail: string;
@@ -146,6 +156,28 @@ export interface CourseNotesData {
   nombreAlumnesCurs?: number;
   mccCount?: number;
   mcrCount?: number;
+}
+
+export interface EventMetadata {
+  id?: string;
+  google_event_id: string;
+  aula?: string;
+  embarcacion?: string;
+  instructor_id?: string;
+  notas_sgc?: string;
+  check_in_timestamp?: string | null;
+  notas_instructor?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface FeedbackTicket {
+  id: string;
+  timestamp: string;
+  userEmail: string;
+  context: string;
+  feedbackText: string;
+  status: "pending" | "reviewed" | "implemented";
 }
 
 export interface ExtendedCourseData {

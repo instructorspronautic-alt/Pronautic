@@ -1,6 +1,6 @@
 {
-  "name": "Today's Calendar and Tasks",
-  "description": "Un inspector de tus eventos de Google Calendar y Google Tasks para hoy con resúmenes claros y organización visual.",
+  "name": "Pronautic Copilot",
+  "description": "Copiloto inteligente de cumplimiento formativo y control de calendarios GSuite para la escuela de navegación Pronautic.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
