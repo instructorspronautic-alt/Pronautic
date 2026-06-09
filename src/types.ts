@@ -95,6 +95,12 @@ export interface InstructorProfile {
   email: string;
   location: string;
   courses?: string;
+  habilitaciones?: string;
+  forfor?: boolean;
+  idioma?: string;
+  situacion?: string;
+  observaciones?: string;
+  nextStep?: string;
 }
 
 export interface TeacherAvailability {
