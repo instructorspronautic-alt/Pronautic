@@ -26,8 +26,8 @@ export interface CalendarViewProps {
   onNavigate: (dir: "prev" | "next") => void;
   selectedEvent: CalendarEvent | null;
   setSelectedEvent: (event: CalendarEvent | null) => void;
-  calendarSubTab: "list" | "matrix";
-  setCalendarSubTab: (t: "list" | "matrix") => void;
+  calendarSubTab: "list" | "matrix" | "instructor";
+  setCalendarSubTab: (t: "list" | "matrix" | "instructor") => void;
   showOnlyCourses: boolean;
   setShowOnlyCourses: (v: boolean) => void;
   selectedAulaFilter: string;
