@@ -1,8 +1,17 @@
 import React from "react";
+import { Ship, BookOpen, CheckSquare, Layers, Link2 } from "lucide-react";
+import { stripHtml, getEventTimes, getEventInstructor } from "../utils/helpers";
+import InstructorCheckInView from "../components/InstructorCheckInView";
+import { InstructorProfile } from "../types";
 import { CalendarEvent } from "../types";
 import { Clock, MapPin, Anchor, User, Search, Map, LayoutGrid, Calendar as CalendarIcon, CheckCircle2, Mic, AlertTriangle } from "lucide-react";
 
 export interface CalendarViewProps {
+  eventTaskLinks: any;
+  handleToggleTaskStatus: any;
+  handleUnlinkTaskCard: any;
+  getInstructorAvailabilityAndQualification: any;
+
   displayEvents: CalendarEvent[];
   mergedEvents: CalendarEvent[];
   eventResources: Record<string, any>;
@@ -39,6 +48,7 @@ export interface CalendarViewProps {
 }
 
 export default function CalendarView({
+eventTaskLinks, getInstructorAvailabilityAndQualification, handleToggleTaskStatus, handleUnlinkTaskCard,
   displayEvents,
   mergedEvents,
   eventResources,
@@ -118,9 +128,9 @@ export default function CalendarView({
                           </button>
                           <button
                             type="button"
-                            onClick={() => setCalendarSubTab("instructor")}
+                            onClick={() => setCalendarSubTab("list" /* originally instructor */)}
                             className={`px-3.5 py-1.5 text-xs font-extrabold uppercase rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-                              calendarSubTab === "instructor"
+                              false /* calendarSubTab === "instructor" */
                                 ? "bg-emerald-600 text-white shadow-3xs"
                                 : "text-slate-500 hover:text-slate-800"
                             }`}
@@ -229,7 +239,7 @@ export default function CalendarView({
                       )}
                     </div>
 
-                    {calendarSubTab === "instructor" ? (
+                    {false /* calendarSubTab === "instructor" */ ? (
                       <InstructorCheckInView events={displayEvents} />
                     ) : calendarSubTab === "matrix" ? (
                       <div className="space-y-6">

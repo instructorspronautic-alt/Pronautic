@@ -1,7 +1,7 @@
 import React from "react";
-import { BookOpen, Check, Search, Filter, ArrowLeft, Clock } from "lucide-react";
+import { stripHtml } from "../utils/helpers";
 import { CalendarEvent, GoogleTask } from "../types";
-import { Clock, LayoutGrid, CheckSquare, Search, Building2, User, Mic, FileText, CheckCircle2 } from "lucide-react";
+import { Clock, LayoutGrid, CheckSquare, Search, Building2, User, Mic, FileText, CheckCircle2, BookOpen, ArrowLeft, Check, Filter } from "lucide-react";
 
 export interface TasksViewProps {
   tasks: GoogleTask[];
@@ -56,7 +56,13 @@ export default function TasksView({
   onUnlinkTaskCard,
   selectedEvent,
   AUDIT_TASKS,
-  formatEventDates
+  formatEventDates,
+  globalConflicts,
+  getInstructorAvailabilityAndQualification,
+  handleToggleAuditTaskDashboard,
+  setOnlyShowRangeTasks,
+  onlyShowRangeTasks,
+  handleToggleTaskStatus
 }: TasksViewProps) {
   return (
     <>

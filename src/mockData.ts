@@ -27,6 +27,24 @@ export const mockCalendars = [
           },
         ];
 
+
+const event1Start = new Date();
+event1Start.setHours(9, 0, 0, 0);
+const event1End = new Date(event1Start);
+event1End.setHours(13, 0, 0, 0);
+
+const event2Start = new Date();
+event2Start.setDate(event2Start.getDate() + 1);
+event2Start.setHours(16, 0, 0, 0);
+const event2End = new Date(event2Start);
+event2End.setHours(20, 0, 0, 0);
+
+const event3Start = new Date();
+event3Start.setDate(event3Start.getDate() + 2);
+event3Start.setHours(10, 0, 0, 0);
+const event3End = new Date(event3Start);
+event3End.setHours(14, 0, 0, 0);
+
 export const mockEventsList: CalendarEvent[] = [
           {
             id: "evt-01",
@@ -466,3 +484,5 @@ export const PRONAUTIC_COURSES_CATALOG = [
   { id: "cy", name: "Capitán de Yate (CY)", code: "CY" },
 ];
 
+
+export const AUDIT_TASKS: any[] = [];

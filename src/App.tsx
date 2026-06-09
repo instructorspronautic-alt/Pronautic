@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useAppLogic } from "./hooks/useAppLogic";
+import SidebarView from "./views/SidebarView";
 import { initAuth, googleSignIn, logout } from "./auth";
 import {
   CalendarEvent,
@@ -104,17 +105,14 @@ function stripHtml(html: string): string {
 
 export default function App() {
   const viewProps = useAppLogic();
-  const { setCalendarSubTab, showOnlyCourses, setShowOnlyCourses, selectedAulaFilter, setSelectedAulaFilter, selectedEmbarcacionFilter, setSelectedEmbarcacionFilter, formatTime, formatEventDates, teacherEmailFilter, displayTasks, displayCourses, events, tasksTabMode, setTasksTabMode, selectedCourseIdForTasks, setSelectedCourseIdForTasks, searchTaskQuery, setSearchTaskQuery, tasksRoleFilter, setTasksRoleFilter, handleToggleAuditTask, handleUnlinkTaskCard, handleToggleTaskStatus, handleToggleAuditTaskDashboard, setOnlyShowRangeTasks, getInstructorAvailabilityAndQualification, onlyShowRangeTasks, needsAuth, user, isLoggingIn, handleLogin, handleLogout, activeTab, errorText, calendars, selectedCalIds, setSelectedCalIds, isAdminModalOpen, setIsAdminModalOpen, aulas, setAulas, embarcaciones, setEmbarcaciones, showFeedbackAgent, setShowFeedbackAgent, feedbackText, setFeedbackText, isSendingFeedback, setIsSendingFeedback, selectedEvent, userRole, selectedInstructorForCourses, setSelectedInstructorForCourses, mergedEvents, eventResources, tasks, eventTaskLinks, handleLinkTask, handleUnlinkTask, handleToggleTaskStatus, handleSaveResources, handleUpdateEvent, checkTeacherAvailability, staffDatabase } = viewProps;
+  
+  const { displayEvents, focusDate, token, loadWorkspaceData, navigateRange } = viewProps;
+const { needsAuth, user, isLoggingIn, activeTab, errorText, calendars, selectedCalIds, setSelectedCalIds, isAdminModalOpen, setIsAdminModalOpen, aulas, setAulas, embarcaciones, setEmbarcaciones, showFeedbackAgent, setShowFeedbackAgent, feedbackText, setFeedbackText, isSendingFeedback, setIsSendingFeedback, selectedEvent, userRole, mergedEvents, eventResources, tasks, eventTaskLinks, handleLinkTask, handleUnlinkTask, handleSaveResources, handleUpdateEvent, checkTeacherAvailability, staffDatabase, setCalendarSubTab, showOnlyCourses, setShowOnlyCourses, selectedAulaFilter, setSelectedAulaFilter, selectedEmbarcacionFilter, setSelectedEmbarcacionFilter, formatTime, formatEventDates, teacherEmailFilter, displayTasks, displayCourses, events, tasksTabMode, setTasksTabMode, selectedCourseIdForTasks, setSelectedCourseIdForTasks, searchTaskQuery, setSearchTaskQuery, tasksRoleFilter, setTasksRoleFilter, handleUnlinkTaskCard, handleToggleTaskStatus, handleToggleAuditTaskDashboard, setOnlyShowRangeTasks, getInstructorAvailabilityAndQualification, onlyShowRangeTasks, handleLogin, handleLogout, selectedInstructorForCourses, setSelectedInstructorForCourses, progressPercent, completedTasksCount, totalTasksCount, globalConflicts, dgmmAlerts, setViewRange, setSelectedEvent, setFeedbackTickets, triggerAIAnalysis, handleExportToSheets, viewRange, lastSyncTime, syncFrequency, setSyncFrequency, isLoadingData, isLoadingAnalysis, todayFormatted, setActiveTab, analysis, isExporting, exportSuccess, sgcAlertStatus, calendarSubTab} = viewProps;
   const userName = user?.email?.toLowerCase() === "instructorspronautic@gmail.com" ? "Robert" : user?.email?.toLowerCase() === "bopronautic@gmail.com" ? "Raquel" : user?.displayName || "Usuario";
   const userRoleLabel = user?.email?.toLowerCase() === "instructorspronautic@gmail.com" ? "Director de Operaciones" : user?.email?.toLowerCase() === "bopronautic@gmail.com" ? "Directora del Centro" : "Usuario Pronautic";
   const isRober = user?.email?.toLowerCase() === "instructorspronautic@gmail.com";
   const isRaquel = user?.email?.toLowerCase() === "bopronautic@gmail.com";
   const userAvatarUrl = isRober ? "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=80&h=80&q=80" : isRaquel ? "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=facearea&facepad=2&w=80&h=80&q=80" : user?.photoURL;
-  const progressPercent = viewProps.progressPercent || 0;
-  const completedTasksCount = viewProps.completedTasksCount || 0;
-  const totalTasksCount = viewProps.totalTasksCount || 0;
-  const globalConflicts = viewProps.globalConflicts || [];
-  const dgmmAlerts = viewProps.dgmmAlerts || [];
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 antialiased font-sans flex flex-col justify-between selection:bg-indigo-100 selection:text-indigo-900">
       {/* Top Navigation */}
@@ -608,7 +606,7 @@ export default function App() {
                   }`}
                 >
                   <CalendarIcon className="w-3.5 h-3.5" />
-                  Mis Eventos ({displayEvents.length})
+                  Mis Eventos ({viewProps.displayEvents.length})
                 </button>
                 <button
                   onClick={() => setActiveTab("tasks")}
@@ -700,7 +698,13 @@ export default function App() {
                 
                 {activeTab === "calendar" && (
                   <CalendarView
-                    displayEvents={displayEvents}
+
+  eventTaskLinks={viewProps.eventTaskLinks}
+  handleToggleTaskStatus={viewProps.handleToggleTaskStatus}
+  handleUnlinkTaskCard={viewProps.handleUnlinkTaskCard}
+  getInstructorAvailabilityAndQualification={viewProps.getInstructorAvailabilityAndQualification}
+
+                    displayEvents={viewProps.displayEvents}
                     mergedEvents={mergedEvents}
                     eventResources={eventResources}
                     globalConflicts={globalConflicts}
@@ -709,9 +713,9 @@ export default function App() {
                     setSelectedCalIds={setSelectedCalIds}
                     viewRange={viewRange}
                     setViewRange={setViewRange}
-                    focusDate={focusDate}
+                    focusDate={viewProps.focusDate}
                     todayFormatted={todayFormatted}
-                    onNavigate={handleNavigate}
+                    onNavigate={viewProps.handleNavigate!}
                     selectedEvent={selectedEvent}
                     setSelectedEvent={setSelectedEvent}
                     calendarSubTab={calendarSubTab}
@@ -737,30 +741,36 @@ export default function App() {
                 )}
 
                 {activeTab === "tasks" && (
-                  <TasksView
-                    tasks={tasks}
-                    displayTasks={displayTasks}
-                    displayCourses={displayCourses}
-                    events={events}
-                    mergedEvents={mergedEvents}
-                    eventResources={eventResources}
-                    eventTaskLinks={eventTaskLinks}
-                    tasksTabMode={tasksTabMode}
-                    setTasksTabMode={setTasksTabMode}
-                    selectedCourseIdForTasks={selectedCourseIdForTasks}
-                    setSelectedCourseIdForTasks={setSelectedCourseIdForTasks}
-                    searchTaskQuery={searchTaskQuery}
-                    setSearchTaskQuery={setSearchTaskQuery}
-                    tasksRoleFilter={tasksRoleFilter}
-                    setTasksRoleFilter={setTasksRoleFilter}
-                    onToggleTaskStatus={handleToggleTaskStatus}
-                    onToggleAuditTask={handleToggleAuditTask}
-                    onLinkTask={handleLinkTask}
-                    onUnlinkTaskCard={handleUnlinkTaskCard}
-                    selectedEvent={selectedEvent}
-                    AUDIT_TASKS={AUDIT_TASKS}
-                    formatEventDates={formatEventDates}
-                  />
+                                  <TasksView
+                  tasks={tasks}
+                  displayTasks={displayTasks}
+                  displayCourses={displayCourses}
+                  events={events}
+                  mergedEvents={mergedEvents}
+                  eventResources={eventResources}
+                  eventTaskLinks={eventTaskLinks}
+                  tasksTabMode={tasksTabMode}
+                  setTasksTabMode={setTasksTabMode}
+                  selectedCourseIdForTasks={selectedCourseIdForTasks!}
+                  setSelectedCourseIdForTasks={setSelectedCourseIdForTasks}
+                  searchTaskQuery={searchTaskQuery}
+                  setSearchTaskQuery={setSearchTaskQuery}
+                  tasksRoleFilter={tasksRoleFilter}
+                  setTasksRoleFilter={setTasksRoleFilter}
+                  onToggleTaskStatus={handleToggleTaskStatus!}
+                  onToggleAuditTask={handleToggleAuditTaskDashboard!}
+                  onLinkTask={handleLinkTask}
+                  onUnlinkTaskCard={handleUnlinkTaskCard!}
+                  selectedEvent={selectedEvent}
+                  AUDIT_TASKS={AUDIT_TASKS!}
+                  formatEventDates={formatEventDates}
+                  globalConflicts={viewProps.globalConflicts!}
+                  getInstructorAvailabilityAndQualification={viewProps.getInstructorAvailabilityAndQualification!}
+                  handleToggleAuditTaskDashboard={viewProps.handleToggleAuditTaskDashboard!}
+                  setOnlyShowRangeTasks={viewProps.setOnlyShowRangeTasks!}
+                  onlyShowRangeTasks={viewProps.onlyShowRangeTasks!}
+                  handleToggleTaskStatus={viewProps.handleToggleTaskStatus!}
+                />
                 )}
 
 

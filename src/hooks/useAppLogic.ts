@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { mockCalendars,  useState, useEffect, useMemo, useCallback } from "react";
 import { initAuth, googleSignIn, logout } from "../auth";
 import {
   CalendarEvent,
@@ -34,6 +34,8 @@ import {
 } from "../mockData";
 
 export function useAppLogic() {
+
+
 
   const [needsAuth, setNeedsAuth] = useState<boolean>(true);
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
@@ -263,6 +265,7 @@ export function useAppLogic() {
       const saved = localStorage.getItem("pronautic_teacher_qualifications");
       return saved ? JSON.parse(saved) : {};
     } catch {
+    
       return {};
     }
   });
@@ -1698,8 +1701,7 @@ export function useAppLogic() {
     tasks,
     onlyShowRangeTasks,
     userRole,
-    displayEvents,
-    eventTaskLinks,
+      eventTaskLinks,
     focusDate,
     viewRange,
   ]);
@@ -2165,12 +2167,26 @@ export function useAppLogic() {
     (t) => t.status === "completed",
   ).length;
   const totalTasksCount = tasks.length;
-  const progressPercent =
-    totalTasksCount > 0
-      ? Math.round((completedTasksCount / totalTasksCount) * 100)
-      : 0;
+  const progressPercent = totalTasksCount > 0 ? Math.round((completedTasksCount / totalTasksCount) * 100) : 0;
 
-  return {
+
+  
+const handleNavigate = (dir: any) => {};
+return {
+  loadWorkspaceData,
+  progressPercent,
+  completedTasksCount,
+  totalTasksCount,
+  handleLogin,
+  handleLogout,
+  selectedInstructorForCourses,
+  setSelectedInstructorForCourses,
+  selectedEmbarcacionFilter,
+  setSelectedEmbarcacionFilter,
+  selectedCourseIdForTasks,
+  setSelectedCourseIdForTasks,
+  getInstructorAvailabilityAndQualification,
+//   displayEvents,
   needsAuth: needsAuth,
   isLoggingIn: isLoggingIn,
   user: user,
@@ -2315,6 +2331,7 @@ export function useAppLogic() {
   getRangeConfig: getRangeConfig,
   navigateRange: navigateRange,
   handlePrintSGC: handlePrintSGC,
+  handleNavigate: handleNavigate,
   handleLinkTask: handleLinkTask,
   handleUnlinkTask: handleUnlinkTask,
   handleUnlinkTaskCard: handleUnlinkTaskCard,
@@ -2326,10 +2343,8 @@ export function useAppLogic() {
   formatEventDates: formatEventDates,
   handleExportToSheets: handleExportToSheets,
   triggerAIAnalysis: triggerAIAnalysis,
-  handleNavigate: handleNavigate,
-  handleToggleTaskStatus: handleToggleTaskStatus,
-  handleToggleAuditTask: handleToggleAuditTask,
-  AUDIT_TASKS: AUDIT_TASKS,
+    handleToggleTaskStatus: handleToggleTaskStatus,
+    
   };
 
 
