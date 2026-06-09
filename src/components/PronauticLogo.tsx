@@ -2,7 +2,7 @@ import React from "react";
 
 interface LogoProps {
   className?: string;
-  variant?: ull | compact | light | circular | icon;
+  variant?: "full" | "compact" | "light" | "circular" | "icon";
 }
 
 export function PronauticLogo({ className = "h-14", variant = "full" }: LogoProps) {
@@ -128,7 +128,7 @@ export function PronauticLogo({ className = "h-14", variant = "full" }: LogoProp
     );
   }
 
-  if (variant === compact) {
+  if (variant === "compact") {
     return (
       <div className={`flex items-center gap-2 ${className}`}>
         {/* Crisp Compass Rose icon */}
