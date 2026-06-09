@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { format, isSameDay } from "date-fns";
 import { es } from "date-fns/locale";
 import { CalendarEvent } from "../types";
-import { supabase } from "../supabase";
 import { CheckSquare, Clock, MapPin, CheckCircle2, Mic } from "lucide-react";
 
 interface Props {
@@ -31,20 +30,12 @@ export default function InstructorCheckInView({ events }: Props) {
     return new Date(startA).getTime() - new Date(startB).getTime();
   });
 
-  // Load from Supabase on mount
+  // Load from local storage on mount
   useEffect(() => {
-    const loadStatus = async () => {
-      if (!supabase) return; // gracefully fallback
-      const { data, error } = await supabase
-        .from('event_metadata')
-        .select('*');
-      if (data && !error) {
-        const statuses: Record<string, any> = {};
-        data.forEach(row => {
-          statuses[row.google_event_id] = row;
-        });
-        setDbStatus(statuses);
-      }
+    const loadStatus = () => {
+      const saved = localStorage.getItem("instructor_checkins") || "{}";
+      const metadata = JSON.parse(saved);
+      setDbStatus(metadata);
     };
     loadStatus();
   }, []);
@@ -53,28 +44,11 @@ export default function InstructorCheckInView({ events }: Props) {
     setCheckingIn(eventId);
     const now = new Date().toISOString();
     
-    // Simulate or Write to DB
-    if (supabase) {
-      const { data, error } = await supabase.from('event_metadata').upsert({
-        google_event_id: eventId,
-        check_in_timestamp: now,
-        updated_at: now
-      }, { onConflict: 'google_event_id' });
-      
-      if (!error) {
-        setDbStatus(prev => ({
-          ...prev,
-          [eventId]: { ...prev[eventId], check_in_timestamp: now }
-        }));
-      }
-    } else {
-      // Offline / Local fallback simulation for playground without real Supabase keys
-      const saved = localStorage.getItem("pronautic_event_metadata") || "{}";
-      const metadata = JSON.parse(saved);
-      metadata[eventId] = { ...(metadata[eventId] || {}), check_in_timestamp: now };
-      localStorage.setItem("pronautic_event_metadata", JSON.stringify(metadata));
-      setDbStatus(metadata);
-    }
+    const saved = localStorage.getItem("instructor_checkins") || "{}";
+    const metadata = JSON.parse(saved);
+    metadata[eventId] = { ...(metadata[eventId] || {}), check_in_timestamp: now, updated_at: now };
+    localStorage.setItem("instructor_checkins", JSON.stringify(metadata));
+    setDbStatus(metadata);
     
     setCheckingIn(null);
   };

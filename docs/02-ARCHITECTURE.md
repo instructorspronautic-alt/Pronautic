@@ -7,12 +7,13 @@
 ## Stack Tecnológico
 
 La plataforma está diseñada sobre un stack web moderno y de alta escalabilidad (JAMStack modernizado con proxy backend):
-- **Frontend / Core UI:** React 19, TypeScript 5.8
+- **Front End / Core UI:** React 19, TypeScript 5.8
 - **Build Tool:** Vite 6
-- **Estilos y Componentes:** Tailwind CSS 4, Lucide React (Íconos), Framer Motion (`motion/react` para animaciones y transiciones de UI)
+- **Estilos y Componentes:** Tailwind CSS 4, Lucide React, recharts, date-fns, Framer Motion
 - **Backend Proxy:** Express.js (integrado a través de Vite middleware en dev y empaquetado standalone en producción)
 - **Integraciones IA:** Gemini API (`gemini-2.5-flash` vía `@google/genai`) para análisis semántico.
 - **Autenticación e Integraciones Cloud:** Firebase Auth (Proveedor Google Auth), Google APIs (Calendar API v3, Tasks API v1, Sheets API v4).
+- **Capa Base de Datos:** Google Sheets API v4 (Actúa como persistencia operativa compartida en tiempo real).
 
 ## Arquitectura de Aplicación (ASCII Diagram)
 
@@ -21,7 +22,7 @@ La plataforma está diseñada sobre un stack web moderno y de alta escalabilidad
 |                  [ CLIENTE / NAVEGADOR ]                  |
 |    React SPA (Vite) + Tailwind CSS + Framer Motion        |
 |    - Estado Global (React Hooks)                          |
-|    - App Storage (localStorage / IndexedDB)               |
+|    - App Storage (localStorage buffer)                    |
 +--------------------------+--------------------------------+
                            |
             (Llamadas REST / API Proxy / Autenticación)
@@ -53,9 +54,14 @@ La plataforma está diseñada sobre un stack web moderno y de alta escalabilidad
 4. **Presentación:** La SPA fusiona dinámicamente cada evento de Calendar con el bloque en memoria local, construyendo la vista "extendida" del estado temporal y metadatos.
 
 ## Decisiones de Diseño Críticas
-1. **Frontend-Heavy State (De momento):** Para priorizar velocidad de entrega, el "estado enriquecido" reside en el cliente (`localStorage`). Esto exige que migremos pronto a Firebase (Firestore) para persistencia en entorno multiusuario real.
+1. **Frontend-Heavy State con Sheets:** Para priorizar facilidad, adopción cero coste y transparencia operativa, el "estado enriquecido" (aulas, métricas, metadatos) escribe asíncronamente en una planilla compartida de Google Sheets de Pronautic. El estado local (`localStorage`) solo actúa como caché ultra veloz temporal.
 2. **Backend Express Embebido:** Se incluyó servidor Node/Express para mantener la API Key de Gemini API oculta y protegida (arquitectura Full-Stack segura).
-3. **Protección de Escritos Calendar:** Por diseño, la aplicación no dispone de módulo PATCH/POST que conecte automáticamente con la API nativa de Google Calendar para modificar un evento, previniendo catastróficos borrados por código erróneo.
+3. **Protección de Escritos Calendar:** Por diseño, la aplicación no dispone de módulo PATCH/POST que conecte automáticamente con la API nativa de Google Calendar para modificar un evento.
+
+## Servicios Base de Datos (Integración Sheets)
+Se han generado dos capas en `/src/services` para gestionar Google Sheets:
+- `sheets.ts`: Bajo nivel interactuando con Fetch standard a `sheets.googleapis.com` para read/write.
+- `sheetsDB.ts`: Alto nivel. Encarga a procesar JSON desde y hacia CSV tabular y conciliar el LocalStorage.
 
 ## Estructura de Proyecto Reflejada
 - `/src/components/*`: Módulos de UI (Modal Auditorías, Dashboard de Métricas, Panel IA).

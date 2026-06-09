@@ -44,16 +44,38 @@ export interface ExtendedCourseData {
 El repositorio interno de ejecución de un evento particular por parte de un profesor (apoya a la generación de La Nota).
 ```typescript
 export interface CourseNotesData {
-  eventId: string;
-  resumen?: string;
+  dataActualitzacio?: string;
+  horariInici?: string;
+  horariDescans?: string;
+  horariFinalitzacio?: string;
   instructorPrincipalNom?: string;
+  instructorPrincipalContractacio?: string;
   instructorSecundariNom?: string;
-  asistentesObservaciones?: string;
-  incidentesAverias?: string;
-  estadoLimpieza?: string;
-  notaGeneral?: string;        // Evaluación 1 al 10
-  fechaCreacion: string;       // ISO String
-  ultimaEdicion: string;       // ISO String
+  instructorSecundariContractacio?: string;
+  clausPortOlimpic?: boolean;
+  clausBNC?: boolean;
+  targetaPortOlimpic?: boolean;
+  targetaBNC?: boolean;
+  nombreAlumnesCurs?: number;
+  mccCount?: number;
+  mcrCount?: number;
+}
+```
+
+### `EventMetadata`
+Metadatos tabulares y check-ins para un evento específico de los instructores.
+```typescript
+export interface EventMetadata {
+  id?: string;
+  google_event_id: string;
+  aula?: string;
+  embarcacion?: string;
+  instructor_id?: string;
+  notas_sgc?: string;
+  check_in_timestamp?: string | null;
+  notas_instructor?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 ```
 
@@ -78,15 +100,15 @@ export interface InstructorProfile {
 | `pronautic_aulas` | `string[]` | Catalogo base estático de espacios de aula. |
 | `pronautic_embarcaciones` | `string[]` | Catalogo base estático de naves. |
 | `event_allocated_resources` | `Record<string, ExtendedCourseData>` | Key es el Event ID de Google, Value es todo metadato Pronautic enlazado. |
+| `instructor_checkins` | `Record<string, EventMetadata>` | Registro local de check-ins de instructores por curso. |
 | `teacher_availabilities` | `TeacherAvailability[]` | Entidades de declaración de tiempo hábil de instructores particulares (independiente a calendarios). |
 | `staff_database_v1` | `InstructorProfile[]` | Lista oficial cacheada del cuerpo docente. |
 
-## Plan de Migración a Firestore (Fase 2)
+## Estructura en Google Sheets (Persistencia Compartida)
 
-Las llaves descritas de `localStorage` presentarán problemas si hay múltiples administradores trabajando a la vez.
+El proyecto utiliza Google Sheets como base de datos en tiempo real mediante el `VITE_SHEETS_DB_ID`.
 
-**Colecciones Firestore Propuestas:**
-1. `events_metadata` (Docs mapeados vía `event.id`). Contiene un JSON idéntico a `ExtendedCourseData`.
-2. `system_catalogs` (Documentos fijos: `aulas` y `embarcaciones`).
-3. `instructors_directory` (Docs mapeador por email o guid conteniendo `InstructorProfile`).
-4. `availabilities` (Docs representando franjas de disponibilidad).
+**Pestañas principales:**
+1. `eventos_metadata` (Filas CSV donde formato es: `[google_event_id, stringificado de allocación JSON]`).
+2. `instructores` (Directorio del cuerpo docente: `[id_instructor, stringificado JSON]`).
+3. `disponibilidades` (Franjas horarias: `[guid_id, stringificado JSON]`).

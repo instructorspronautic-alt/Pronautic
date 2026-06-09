@@ -16,6 +16,8 @@ import {
 } from "./types";
 import ScheduleSummary from "./components/ScheduleSummary";
 import MetricsDashboard from "./components/MetricsDashboard";
+import ConflictsBanner from "./components/ConflictsBanner";
+import DGMMAlertsBanner from "./components/DGMMAlertsBanner";
 import InstructorCheckInView from "./components/InstructorCheckInView";
 import EventDetailModal, {
   AUDIT_TASKS,
@@ -23,6 +25,14 @@ import EventDetailModal, {
 } from "./components/EventDetailModal";
 import AdminResourcesModal from "./components/AdminResourcesModal";
 import { PronauticLogo } from "./components/PronauticLogo";
+import {
+  loadEventResources,
+  loadInstructors,
+  loadAvailabilities,
+  saveEventResources,
+  saveInstructors,
+  saveAvailabilities,
+} from "./services/sheetsDB";
 const pronauticSailImage =
   "/src/assets/images/pronautic_landing_sail_1779873853995.png";
 import { User } from "firebase/auth";
@@ -61,6 +71,7 @@ import {
   Bot,
   Send,
   ClipboardList,
+  X,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -719,19 +730,31 @@ export default function App() {
       if (savedTasks) {
         setEventTaskLinks(JSON.parse(savedTasks));
       }
-      const savedResources = localStorage.getItem("event_allocated_resources");
-      if (savedResources) {
-        setEventResources(JSON.parse(savedResources));
-      }
       const savedOverrides = localStorage.getItem("event_overrides");
       if (savedOverrides) {
         setEventOverrides(JSON.parse(savedOverrides));
       }
-      const savedAvailabilities = localStorage.getItem(
-        "teacher_availabilities",
-      );
-      if (savedAvailabilities) {
-        setAvailabilities(JSON.parse(savedAvailabilities));
+
+      if (token && token !== "mock-token") {
+        Promise.all([
+          loadEventResources(token),
+          loadInstructors(token),
+          loadAvailabilities(token)
+        ]).then(([resources, staff, avails]) => {
+          if (Object.keys(resources).length > 0) setEventResources(resources);
+          if (staff.length > 0) setStaffDatabase(staff);
+          if (avails.length > 0) setAvailabilities(avails);
+        }).catch(err => console.error("Error loading from sheets", err));
+      } else {
+        // Mock fallback
+        const savedResources = localStorage.getItem("event_allocated_resources");
+        if (savedResources) {
+          setEventResources(JSON.parse(savedResources));
+        }
+        const savedAvailabilities = localStorage.getItem("teacher_availabilities");
+        if (savedAvailabilities) {
+          setAvailabilities(JSON.parse(savedAvailabilities));
+        }
       }
     } catch (e) {
       console.error(
@@ -739,7 +762,7 @@ export default function App() {
         e,
       );
     }
-  }, []);
+  }, [token]);
 
   const handleAddAvailability = (
     availability: Omit<
@@ -753,6 +776,9 @@ export default function App() {
           a.id === editingAvailId ? { ...a, ...availability } : a,
         );
         localStorage.setItem("teacher_availabilities", JSON.stringify(updated));
+        if (token && token !== "mock-token") {
+          saveAvailabilities(token, updated);
+        }
         return updated;
       });
       setEditingAvailId(null);
@@ -765,6 +791,9 @@ export default function App() {
       setAvailabilities((prev) => {
         const updated = [...prev, newAvail];
         localStorage.setItem("teacher_availabilities", JSON.stringify(updated));
+        if (token && token !== "mock-token") {
+          saveAvailabilities(token, updated);
+        }
         return updated;
       });
     }
@@ -774,6 +803,9 @@ export default function App() {
     setAvailabilities((prev) => {
       const updated = prev.filter((a) => a.id !== id);
       localStorage.setItem("teacher_availabilities", JSON.stringify(updated));
+      if (token && token !== "mock-token") {
+        saveAvailabilities(token, updated);
+      }
       return updated;
     });
     if (editingAvailId === id) {
@@ -809,6 +841,9 @@ export default function App() {
         "event_allocated_resources",
         JSON.stringify(updated),
       );
+      if (token && token !== "mock-token") {
+        saveEventResources(token, eventId, resources);
+      }
       return updated;
     });
   };
@@ -2329,6 +2364,43 @@ export default function App() {
     }
     return { startTime, endTime };
   };
+
+  // SUBTASK-05.1 — Lógica de cálculo en App.tsx para DGMM
+  const dgmmAlerts = useMemo(() => {
+    const alerts: CalendarEvent[] = [];
+    const now = new Date();
+    const fifteenDaysFromNow = new Date();
+    fifteenDaysFromNow.setDate(now.getDate() + 15);
+
+    mergedEvents.forEach(e => {
+      const isCourse =
+        (e.summary || "").toUpperCase().includes("PER") ||
+        (e.summary || "").toUpperCase().includes("PNB") ||
+        (e.summary || "").toUpperCase().includes("STCW") ||
+        (e.summary || "").toUpperCase().includes("PRACTICA");
+      if (!isCourse) return;
+
+      const startStr = e.start?.dateTime || e.start?.date;
+      if (!startStr) return;
+      const startD = new Date(startStr);
+
+      if (startD >= now && startD <= fifteenDaysFromNow) {
+        const estado = eventResources[e.id]?.estado;
+        if (estado !== "COMUNICADO DGMM" && estado !== "EN EJECUCIÓN" && estado !== "COMPLETADO") {
+          alerts.push(e);
+        }
+      }
+    });
+
+    // Sort by soonest
+    alerts.sort((a,b) => {
+      const da = new Date(a.start?.dateTime || a.start?.date || "");
+      const db = new Date(b.start?.dateTime || b.start?.date || "");
+      return da.getTime() - db.getTime();
+    });
+
+    return alerts;
+  }, [mergedEvents, eventResources]);
 
   // Find all active resource conflicts in the current displayed events across Aulas, Embarcaciones and Materials
   const globalConflicts = useMemo(() => {
@@ -3919,6 +3991,9 @@ export default function App() {
 
               {/* Tab view screen wrappers */}
               <div className="flex-grow min-h-[300px]">
+                <ConflictsBanner conflicts={globalConflicts} />
+                <DGMMAlertsBanner alerts={dgmmAlerts} />
+
                 {activeTab === "ai" && (
                   <div>
                     {analysis ? (

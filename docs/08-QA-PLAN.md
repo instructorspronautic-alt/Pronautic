@@ -31,6 +31,15 @@ Para garantizar que el Pronautic Compliance Copilot no altere de forma indeseada
 - M_Ai1: Pulsar Run Co-Pilot Analysis en la franja superior -> Validar carga asíncrona sin bloqueos del GUI.
 - M_Ai2: Interceptar Network, forzar un Error HTTP de vuelta para evaluar -> La plataforma **DEBE responder con el string genérico "Sinergia de Tareas Mock..."** y no "500 Server Exception". Todo en lenguaje Español por el Fallback.
 
+### E. Integración Real-Time y Google Sheets
+- M_Sheets1: Guardar aula en un evento → recargar → el aula sigue asignada (localStorage). Con token real → verificar en el spreadsheet de Sheets que la fila existe.
+- M_Sheets2: Rober guarda recurso → Raquel recarga la app → Raquel ve el mismo recurso (validación multi-usuario Sheets).
+
+### F. Alertas Activas y Conflictos (Banners)
+- M_Conflict1: Asignar la misma aula a dos eventos solapados en tiempo → el banner rojo aparece con la descripción del conflicto.
+- M_DGMM1: Crear evento de curso con fecha dentro de 10 días y estado "PLANIFICADO" → el banner naranja aparece con el nombre del curso y "10 días restantes".
+- M_DGMM2: Cambiar el estado a "COMUNICADO DGMM" → el banner naranja desaparece para ese curso.
+
 ## 2. Checklist Final Previo a Release en Producción
 
 - [ ] App web levanta correcta en dominio Vercel/CloudRun sin alertas severas del bundler Vite.

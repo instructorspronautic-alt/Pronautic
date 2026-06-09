@@ -22,12 +22,14 @@ La plataforma consolida la información calendarizada y la transforma en entidad
 3. **Auditoría de Calidad DGMM (38 Pasos):** Cuestionario y registro estructurado en fases (Inicio, Aula/Práctica, Cierre) para cada curso, garantizando que el instructor repasa normativas y requerimientos legales.
 4. **"La Nota" Operativa (Catalán):** Generador dinámico de un bloque de texto que resume un curso completo (datos base, horario, asistencia, incidentes) para ser copiado al portapapeles y usado en las bitácoras o reportes de mensajería (WhatsApp/Email) del centro, estandarizando la comunicación en catalán.
 5. **Análisis IA con Gemini:** Sistema que lee agendas, tareas pendientes diarias y eventos para ofrecer sugerencias logísticas, sinergias y recomendaciones mediante inteligencia artificial en lenguaje natural (español).
+6. **Métricas Operativas (Dashboard):** Panel visual con gráficos y KPIs de carga semanal, reparto por categoría y volumen de alumnos.
+7. **Check-In de Instructores:** Vista rápida que localiza los cursos de "Hoy" y provee un panel fácil a los instructores para "fichar" el inicio de la clase o dejar un mensaje de voz logístico.
+8. **Alertas de Solapamiento Físico:** Motor proactivo para detectar si una misma aula o embarcación está reservada para dos eventos simultáneos, generando alertas rojas.
+9. **Control de Plazos DGMM (15 Días):** Reglas de negocio para monitorear el preaviso exigido por ley e informar mediante banner naranja de cursos cercanos sin el trámite completado.
 
 ## Módulos Pendientes (Fase 2)
 
-- **Alertas Solapamiento Físico:** Motor proactivo para detectar si una misma aula o embarcación está reservada para dos eventos simultáneos, así como el solapamiento de horarios de instructores.
-- **Control de Plazos DGMM (15 Días):** Reglas de negocio para monitorear el preaviso exigido por ley (comunicación a capitanía mínimo 15 días previos).
-- **Sincronización Multi-Usuario (Firestore):** Transición del actual motor local de estado persistente (localStorage) hacia una base de datos Firebase/Firestore en la nube que permita colaboración multi-usuario y multi-dispositivo en tiempo real.
+- **Sincronización Avanzada con Google Sheets:** Mantenimiento y optimización de la estructura de las hojas de Google que actúa como persistencia de la escuela de todos los datos introducidos en Fase 1.
 - **Push-to-Calendar (Opcional & Autorizado):** Funcionalidad restringida que, *únicamente bajo consentimiento directo explícito y manual del usuario admin*, permitiría re-publicar actualizaciones de un evento (añadiendo metadatos) nuevamente hacia Google Calendar.
 
 ## Requisitos No Funcionales
