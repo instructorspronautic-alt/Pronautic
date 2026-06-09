@@ -25,6 +25,7 @@ export default function AIAnalysisView({
   tasks,
   onTriggerAnalysis,
 }: AIAnalysisViewProps) {
+  if (!events) return <div className="p-8 text-center text-slate-500 font-medium">No hay datos disponibles para mostrar todavía.</div>;
   return (
     <div>
       {analysis ? (

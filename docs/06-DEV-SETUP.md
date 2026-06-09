@@ -34,7 +34,7 @@ VITE_FIREBASE_MESSAGING_SENDER_ID="pega_tu_messagingSenderId"
 VITE_FIREBASE_APP_ID="pega_tu_appId"
 
 # ID de la base de datos local en Google Sheets oficial (Ver documento 09)
-VITE_SHEETS_DB_ID=""
+VITE_SHEETS_DB_ID="1mzhnYTsZRWe2TM1Lz7YuyOLaBo_L0r6cuef6GKNGe9Y"
 
 # Gemini API Key para el backend Express
 GEMINI_API_KEY="AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXX"

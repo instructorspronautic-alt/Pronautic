@@ -83,6 +83,7 @@ eventTaskLinks, getInstructorAvailabilityAndQualification, handleToggleTaskStatu
   handleSaveResources,
   tasks
 }: CalendarViewProps) {
+  if (!displayEvents) return <div className="p-8 text-center text-slate-500 font-medium">No hay datos disponibles para mostrar todavía.</div>;
   return (
     <>
       

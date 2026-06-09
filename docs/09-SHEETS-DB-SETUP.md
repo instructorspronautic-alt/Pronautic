@@ -25,7 +25,7 @@ En la parte inferior izquierda de la pantalla, renombra la pestaña "Hoja 1" y a
 3. Ve al código fuente del sistema Pronautic, busca o crea el archivo `.env.local` en la raíz del proyecto.
 4. Añade la siguiente línea:
    ```env
-   VITE_SHEETS_DB_ID="Pega_aqui_el_ID_copiado"
+   VITE_SHEETS_DB_ID="1mzhnYTsZRWe2TM1Lz7YuyOLaBo_L0r6cuef6GKNGe9Y"
    ```
 
 ## Paso 4: Configurar los Permisos de Acceso
