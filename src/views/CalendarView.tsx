@@ -129,9 +129,9 @@ eventTaskLinks, getInstructorAvailabilityAndQualification, handleToggleTaskStatu
                           </button>
                           <button
                             type="button"
-                            onClick={() => setCalendarSubTab("list" /* originally instructor */)}
+                            onClick={() => setCalendarSubTab("instructor")}
                             className={`px-3.5 py-1.5 text-xs font-extrabold uppercase rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-                              false /* calendarSubTab === "instructor" */
+                              calendarSubTab === "instructor"
                                 ? "bg-emerald-600 text-white shadow-3xs"
                                 : "text-slate-500 hover:text-slate-800"
                             }`}
@@ -240,8 +240,13 @@ eventTaskLinks, getInstructorAvailabilityAndQualification, handleToggleTaskStatu
                       )}
                     </div>
 
-                    {false /* calendarSubTab === "instructor" */ ? (
-                      <InstructorCheckInView events={displayEvents} />
+                    {calendarSubTab === "instructor" ? (
+                      <InstructorCheckInView 
+                        events={displayEvents} 
+                        eventResources={eventResources}
+                        handleSaveResources={handleSaveResources}
+                        staffDatabase={staffDatabase}
+                      />
                     ) : calendarSubTab === "matrix" ? (
                       <div className="space-y-6">
                         {/* Matrix Section: Aulas/Classrooms */}

@@ -276,6 +276,56 @@ export default function ResourcesView(props: any) {
                             </table>
                           </div>
 
+                          {/* Asignación Masiva de Docentes */}
+                          <div className="mt-8">
+                            <h4 className="text-sm font-bold text-slate-800 mb-2 border-b border-slate-200 pb-2">
+                              Asignación Masiva a Cursos Sin Instructor
+                            </h4>
+                            <p className="text-[11px] text-slate-500 mb-3">
+                              Cursos y prácticas listadas sin docente. Asigna instructores rápidamente.
+                            </p>
+                            <div className="grid grid-cols-1 gap-2 max-h-64 overflow-y-auto pr-2">
+                              {mergedEvents
+                                .filter(e => {
+                                  const name = (e.summary || "").toUpperCase();
+                                  const isCourse = name.includes("STCW") || name.includes("PER") || name.includes("PNB") || name.includes("PRACTICA");
+                                  const hasInstructor = !!eventResources[e.id]?.instructor;
+                                  return isCourse && !hasInstructor;
+                                })
+                                .map(e => (
+                                  <div key={e.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-rose-200 p-2 rounded gap-2 sm:gap-4 text-xs shadow-sm">
+                                    <div className="flex-1">
+                                      <span className="font-bold text-slate-800 truncate block max-w-full sm:max-w-xs">{e.summary}</span>
+                                      <span className="text-[10px] text-slate-500 font-mono">
+                                        {formatEventDates(e)}
+                                      </span>
+                                    </div>
+                                    <select
+                                      className="border border-slate-300 rounded p-1.5 focus:ring-1 focus:ring-indigo-500 text-slate-700 font-medium w-full sm:w-auto"
+                                      onChange={(ev) => {
+                                        if (ev.target.value) {
+                                          handleSaveResources(e.id, { instructor: ev.target.value });
+                                        }
+                                      }}
+                                    >
+                                      <option value="">Seleccionar Docente...</option>
+                                      {staffDatabase.map(staff => (
+                                        <option key={staff.id} value={staff.name}>{staff.name}</option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                ))}
+                              {mergedEvents.filter(e => {
+                                const name = (e.summary || "").toUpperCase();
+                                return (name.includes("STCW") || name.includes("PER") || name.includes("PNB") || name.includes("PRACTICA")) && !eventResources[e.id]?.instructor;
+                              }).length === 0 && (
+                                <div className="text-center p-4 bg-emerald-50 rounded border border-emerald-100 text-emerald-700 text-xs font-bold">
+                                  ¡Todos los cursos tienen instructor asignado!
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
                           {/* New Instructor Form */}
                           <div className="mt-4 bg-white p-3 rounded border border-slate-200">
                             <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">
