@@ -9,17 +9,29 @@ interface Props {
   eventResources?: Record<string, any>;
   handleSaveResources?: (eventId: string, resources: any) => void;
   staffDatabase?: any[];
+  userEmail?: string;
+  userRole?: string;
 }
 
-export default function InstructorCheckInView({ events, eventResources = {}, handleSaveResources, staffDatabase = [] }: Props) {
+export default function InstructorCheckInView({ events, eventResources = {}, handleSaveResources, staffDatabase = [], userEmail, userRole }: Props) {
   const [dbStatus, setDbStatus] = useState<Record<string, any>>({});
   const [checkingIn, setCheckingIn] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"today" | "all">("today");
 
   const today = new Date();
   
+  const isAdmin = userRole === "admin" || userRole === "owner";
+  // Find current instructor name from email
+  const currentStaff = staffDatabase.find(s => s.email?.toLowerCase() === userEmail?.toLowerCase());
+  const isInstructorOnly = !isAdmin && currentStaff !== undefined; // If they are not admin, filter for them
+  
   // Filter for ONLY courses/practicas logically
   const allCourses = events.filter(e => {
+    // If instructor logging in, filter only assigned courses
+    if (isInstructorOnly && eventResources[e.id]?.instructor !== currentStaff.name) {
+       return false;
+    }
+    
     const startStr = e.start?.dateTime || e.start?.date;
     if (!startStr) return false;
     const summaryStr = (e.summary || "").toUpperCase();
@@ -165,22 +177,28 @@ export default function InstructorCheckInView({ events, eventResources = {}, han
                 {/* Asignación de Instructor */}
                 <div className="mt-1">
                   <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1 mb-1">
-                    <UserPlus className="w-3 h-3 text-slate-400" /> Asignar Instructor
+                    <UserPlus className="w-3 h-3 text-slate-400" /> Asignación
                   </label>
-                  <select
-                    className="w-full border border-slate-200 rounded-lg p-1.5 text-xs focus:ring-1 focus:ring-indigo-500 font-medium text-slate-700 bg-slate-50"
-                    value={currentInstructor}
-                    onChange={(e) => {
-                      if (handleSaveResources) {
-                        handleSaveResources(event.id, { instructor: e.target.value });
-                      }
-                    }}
-                  >
-                    <option value="">-- Sin asignar --</option>
-                    {staffDatabase.map(staff => (
-                      <option key={staff.id} value={staff.name}>{staff.name}</option>
-                    ))}
-                  </select>
+                  {isAdmin ? (
+                    <select
+                      className="w-full border border-slate-200 rounded-lg p-1.5 text-xs focus:ring-1 focus:ring-indigo-500 font-medium text-slate-700 bg-slate-50"
+                      value={currentInstructor}
+                      onChange={(e) => {
+                        if (handleSaveResources) {
+                          handleSaveResources(event.id, { instructor: e.target.value });
+                        }
+                      }}
+                    >
+                      <option value="">-- Sin asignar --</option>
+                      {staffDatabase.map(staff => (
+                        <option key={staff.id} value={staff.name}>{staff.name}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <div className="w-full border border-slate-200 rounded-lg p-1.5 text-xs font-medium text-slate-700 bg-slate-50">
+                      {currentInstructor || "Sin asignar"}
+                    </div>
+                  )}
                 </div>
 
                 <div className="mt-auto pt-3 flex gap-2 w-full border-t border-slate-100">

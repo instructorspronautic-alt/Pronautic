@@ -94,6 +94,7 @@ export interface InstructorProfile {
   phone: string;
   email: string;
   location: string;
+  courses?: string;
 }
 
 export interface TeacherAvailability {

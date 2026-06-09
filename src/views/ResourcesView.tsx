@@ -175,6 +175,9 @@ export default function ResourcesView(props: any) {
                                   <th className="p-2 border-b border-slate-200 text-center">
                                     Cursos
                                   </th>
+                                  <th className="p-2 border-b border-slate-200 text-center">
+                                    Asignados
+                                  </th>
                                   <th className="p-2 border-b border-slate-200 w-10"></th>
                                 </tr>
                               </thead>
@@ -228,6 +231,9 @@ export default function ResourcesView(props: any) {
                                             {staff.location}
                                           </span>
                                         )}
+                                      </td>
+                                      <td className="p-2 text-center text-xs text-slate-500">
+                                        {staff.courses || "-"}
                                       </td>
                                       <td className="p-2 text-center text-xs">
                                         {assignedCourses.length > 0 ? (
@@ -362,7 +368,13 @@ export default function ResourcesView(props: any) {
                                 placeholder="Ubicación"
                                 className="border border-slate-200 rounded p-1.5 text-xs outline-none focus:border-indigo-400"
                               />
-                              <div className="col-span-2 md:col-span-2 flex items-end">
+                              <input
+                                id="new-staff-courses"
+                                type="text"
+                                placeholder="Cursos (ej. PNB, PER)"
+                                className="border border-slate-200 rounded p-1.5 text-xs outline-none focus:border-indigo-400"
+                              />
+                              <div className="col-span-2 md:col-span-3 flex items-end">
                                 <button
                                   onClick={() => {
                                     const brancaInput = document.getElementById(
@@ -383,6 +395,9 @@ export default function ResourcesView(props: any) {
                                     const locInput = document.getElementById(
                                       "new-staff-loc",
                                     ) as HTMLInputElement;
+                                    const coursesInput = document.getElementById(
+                                      "new-staff-courses",
+                                    ) as HTMLInputElement;
 
                                     if (nameInput && nameInput.value.trim()) {
                                       const newStaff: InstructorProfile = {
@@ -393,6 +408,7 @@ export default function ResourcesView(props: any) {
                                         phone: phoneInput.value.trim(),
                                         email: emailInput.value.trim(),
                                         location: locInput.value.trim(),
+                                        courses: coursesInput?.value.trim() || undefined,
                                       };
                                       setStaffDatabase([
                                         newStaff,
@@ -406,6 +422,7 @@ export default function ResourcesView(props: any) {
                                       phoneInput.value = "";
                                       emailInput.value = "";
                                       locInput.value = "";
+                                      if (coursesInput) coursesInput.value = "";
                                     } else {
                                       alert(
                                         "El nombre del instructor es obligatorio.",

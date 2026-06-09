@@ -734,6 +734,7 @@ const { needsAuth, user, isLoggingIn, activeTab, errorText, calendars, selectedC
                     formatEventDates={formatEventDates}
                     checkTeacherAvailability={checkTeacherAvailability}
                     userRole={userRole}
+                    userEmail={user?.email || ""}
                     handleUpdateEvent={handleUpdateEvent}
                     staffDatabase={staffDatabase}
                     teacherEmailFilter={teacherEmailFilter}
