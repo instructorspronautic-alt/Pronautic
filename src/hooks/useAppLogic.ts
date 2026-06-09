@@ -2178,6 +2178,7 @@ return {
   completedTasksCount,
   totalTasksCount,
   handleLogin,
+  handleSimulateLogin,
   handleLogout,
   selectedInstructorForCourses,
   setSelectedInstructorForCourses,

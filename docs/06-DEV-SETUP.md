@@ -12,26 +12,40 @@ Esta guía provee toda la configuración necesaria para operar sobre el reposito
 - **Control de versiones**: `git`.
 - **Cuenta de Google (Google Cloud Console)**: Para activar y configurar un proyecto API que provea el `Client ID` para OAuth y habilitar la Calendar API.
 
-## 2. Variables de Entorno
+## 2. Variables de Entorno y Configuración Firebase para desarrollo local
 
-Debes crear un archivo de entorno local en el directorio raíz. Opcionalmente, renombra `template.env` a `.env` (si existe):
+Para operar con la versión oficial (sin datos simulados), la aplicación usa la autenticación OAuth de Google mediante Firebase (Google Auth Provider). Debes suministrar estas credenciales.
+
+**Cómo obtener las credenciales del proyecto Firebase existente:**
+1. Ve a [Google Cloud Console](https://console.cloud.google.com/) > Proyecto Pronautic.
+2. (Si tienes acceso como Owner en Firebase Cloud) Ve a la Firebase Console > **Project overview > Project settings (Configuración del proyecto) > Pestaña 'General'**.
+3. Baja hasta la sección **tus aplicaciones (Your apps)**, selecciona tu web-app y copia el contenido del objeto de configuración (`firebaseConfig`).
+4. Dónde pegar cada variable en `.env.local` de la raíz del proyecto (crea el archivo si no existe):
 
 ```env
 # Ejemplo de .env.local
-VITE_SUPABASE_URL= (Opcional por si es utilizado en migraciones DDBB)
-VITE_SUPABASE_ANON_KEY= (Opcional)
 
-# Claves de la Firebase Project (Para poder usar firebase Auth)
-VITE_FIREBASE_API_KEY="Axxxxxxxxxxxxxxxxxxxx"
-VITE_FIREBASE_AUTH_DOMAIN="myapp-XXXX.firebaseapp.com"
-VITE_FIREBASE_PROJECT_ID="myapp-XXXX"
-VITE_FIREBASE_STORAGE_BUCKET="myapp-XXXX.appspot.com"
-VITE_FIREBASE_MESSAGING_SENDER_ID="XXXXXXXXXXXXX"
-VITE_FIREBASE_APP_ID="1:XXXXXXXXXX:web:XXXXXXXXXXXX"
+# Claves del Proyecto Firebase Oficial (Para poder usar Firebase Auth con Google Workspace)
+VITE_FIREBASE_API_KEY="pega_tu_apiKey"
+VITE_FIREBASE_AUTH_DOMAIN="pega_tu_authDomain"
+VITE_FIREBASE_PROJECT_ID="pega_tu_projectId"
+VITE_FIREBASE_STORAGE_BUCKET="pega_tu_storageBucket"
+VITE_FIREBASE_MESSAGING_SENDER_ID="pega_tu_messagingSenderId"
+VITE_FIREBASE_APP_ID="pega_tu_appId"
+
+# ID de la base de datos local en Google Sheets oficial (Ver documento 09)
+VITE_SHEETS_DB_ID=""
 
 # Gemini API Key para el backend Express
 GEMINI_API_KEY="AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXX"
 ```
+
+**Verificar que los dominios locales están autorizados en la Consola:**
+Para que el login OAuth de Google funcione desde tu ordenador de programación (localhost):
+1. Ve a Firebase Console -> Menú de la izquierda -> **Authentication**.
+2. Dale a la pestaña **Settings (Configuración)**.
+3. Elige la opción **Authorized domains (Dominios autorizados)**.
+4. Asegúrate firmemente de que `localhost:3000` está añadido como dominio oficial habilitado. Si falta, dale a "Add domain" e insértalo `localhost`. Al guardar, tu puerto localhost podrá autenticarse contra Google correctamente.
 
 ## 3. Instalación de Dependencias e Inició del Proyecto
 

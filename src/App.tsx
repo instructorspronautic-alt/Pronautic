@@ -107,7 +107,7 @@ export default function App() {
   const viewProps = useAppLogic();
   
   const { displayEvents, focusDate, token, loadWorkspaceData, navigateRange } = viewProps;
-const { needsAuth, user, isLoggingIn, activeTab, errorText, calendars, selectedCalIds, setSelectedCalIds, isAdminModalOpen, setIsAdminModalOpen, aulas, setAulas, embarcaciones, setEmbarcaciones, showFeedbackAgent, setShowFeedbackAgent, feedbackText, setFeedbackText, isSendingFeedback, setIsSendingFeedback, selectedEvent, userRole, mergedEvents, eventResources, tasks, eventTaskLinks, handleLinkTask, handleUnlinkTask, handleSaveResources, handleUpdateEvent, checkTeacherAvailability, staffDatabase, setCalendarSubTab, showOnlyCourses, setShowOnlyCourses, selectedAulaFilter, setSelectedAulaFilter, selectedEmbarcacionFilter, setSelectedEmbarcacionFilter, formatTime, formatEventDates, teacherEmailFilter, displayTasks, displayCourses, events, tasksTabMode, setTasksTabMode, selectedCourseIdForTasks, setSelectedCourseIdForTasks, searchTaskQuery, setSearchTaskQuery, tasksRoleFilter, setTasksRoleFilter, handleUnlinkTaskCard, handleToggleTaskStatus, handleToggleAuditTaskDashboard, setOnlyShowRangeTasks, getInstructorAvailabilityAndQualification, onlyShowRangeTasks, handleLogin, handleLogout, selectedInstructorForCourses, setSelectedInstructorForCourses, progressPercent, completedTasksCount, totalTasksCount, globalConflicts, dgmmAlerts, setViewRange, setSelectedEvent, setFeedbackTickets, triggerAIAnalysis, handleExportToSheets, viewRange, lastSyncTime, syncFrequency, setSyncFrequency, isLoadingData, isLoadingAnalysis, todayFormatted, setActiveTab, analysis, isExporting, exportSuccess, sgcAlertStatus, calendarSubTab} = viewProps;
+const { needsAuth, user, isLoggingIn, activeTab, errorText, calendars, selectedCalIds, setSelectedCalIds, isAdminModalOpen, setIsAdminModalOpen, aulas, setAulas, embarcaciones, setEmbarcaciones, showFeedbackAgent, setShowFeedbackAgent, feedbackText, setFeedbackText, isSendingFeedback, setIsSendingFeedback, selectedEvent, userRole, mergedEvents, eventResources, tasks, eventTaskLinks, handleLinkTask, handleUnlinkTask, handleSaveResources, handleUpdateEvent, checkTeacherAvailability, staffDatabase, setCalendarSubTab, showOnlyCourses, setShowOnlyCourses, selectedAulaFilter, setSelectedAulaFilter, selectedEmbarcacionFilter, setSelectedEmbarcacionFilter, formatTime, formatEventDates, teacherEmailFilter, displayTasks, displayCourses, events, tasksTabMode, setTasksTabMode, selectedCourseIdForTasks, setSelectedCourseIdForTasks, searchTaskQuery, setSearchTaskQuery, tasksRoleFilter, setTasksRoleFilter, handleUnlinkTaskCard, handleToggleTaskStatus, handleToggleAuditTaskDashboard, setOnlyShowRangeTasks, getInstructorAvailabilityAndQualification, onlyShowRangeTasks, handleLogin, handleSimulateLogin, handleLogout, selectedInstructorForCourses, setSelectedInstructorForCourses, progressPercent, completedTasksCount, totalTasksCount, globalConflicts, dgmmAlerts, setViewRange, setSelectedEvent, setFeedbackTickets, triggerAIAnalysis, handleExportToSheets, viewRange, lastSyncTime, syncFrequency, setSyncFrequency, isLoadingData, isLoadingAnalysis, todayFormatted, setActiveTab, analysis, isExporting, exportSuccess, sgcAlertStatus, calendarSubTab} = viewProps;
   const userName = user?.email?.toLowerCase() === "instructorspronautic@gmail.com" ? "Robert" : user?.email?.toLowerCase() === "bopronautic@gmail.com" ? "Raquel" : user?.displayName || "Usuario";
   const userRoleLabel = user?.email?.toLowerCase() === "instructorspronautic@gmail.com" ? "Director de Operaciones" : user?.email?.toLowerCase() === "bopronautic@gmail.com" ? "Directora del Centro" : "Usuario Pronautic";
   const isRober = user?.email?.toLowerCase() === "instructorspronautic@gmail.com";
@@ -307,6 +307,17 @@ const { needsAuth, user, isLoggingIn, activeTab, errorText, calendars, selectedC
                   </p>
                 )}
               </div>
+
+              
+
+                {/* Developer Simulation Login Array */}
+                <div className="pt-6 mt-6 border-t border-slate-100 space-y-2">
+                    <p className="text-[10px] text-slate-400 font-mono text-center mb-2 uppercase tracking-widest">Modo Simulación</p>
+                    <div className="flex gap-2 justify-center">
+                      <button onClick={() => handleSimulateLogin!('rober')} disabled={isLoggingIn} className="flex-1 py-1.5 px-3 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-lg border border-slate-200 transition-colors">Login Rober</button>
+                      <button onClick={() => handleSimulateLogin!('raquel')} disabled={isLoggingIn} className="flex-1 py-1.5 px-3 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-lg border border-slate-200 transition-colors">Login Raquel</button>
+                    </div>
+                </div>
 
               {/* Segregated Access & Integrated Coordination Notice */}
               <div className="max-w-sm mx-auto p-4 bg-slate-50/80 rounded-xl border border-slate-150/50 text-[11px] text-slate-500 space-y-1">
