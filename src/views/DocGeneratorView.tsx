@@ -1271,7 +1271,7 @@ export default function DocGeneratorView(props: any) {
                             </div>
                             <div className="border-t border-slate-300 mx-10 mt-1"></div>
                             <p className="text-[10.5px] font-black mt-1 text-slate-800">
-                              D. Roberto García de la Nuez
+                              Raquel Martínez
                             </p>
                             <p className="text-[8.5px] text-slate-400 font-mono font-bold">
                               Oficial de Calidad de la Escuela PRONAUTIC
@@ -1289,7 +1289,7 @@ export default function DocGeneratorView(props: any) {
                             </div>
                             <div className="border-t border-slate-300 mx-10 mt-1"></div>
                             <p className="text-[10.5px] font-black mt-1 text-slate-800">
-                              D. Juan José Pronautic S.L.
+                              Robert Garabán Garcías
                             </p>
                             <p className="text-[8.5px] text-slate-400 font-mono font-bold">
                               Dirección General de Planificación Profesional

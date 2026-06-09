@@ -22,7 +22,7 @@ export function PronauticLogo({ className = "h-14", variant = "full" }: LogoProp
             {/* Symmetrical downward-sweeping semi-circle arc for bottom text */}
             <path 
               id="circular-text-path" 
-              d="M 22,95 A 62,62 0 0,0 138,95" 
+              d="M 29,35 A 62,62 0 1,0 131,35" 
               fill="none" 
             />
           </defs>
@@ -78,14 +78,14 @@ export function PronauticLogo({ className = "h-14", variant = "full" }: LogoProp
           {/* 3. Curved Typography: "PRONAUTIC INICIAL DE ENTRADA / TRAINING CENTRE" */}
           {/* Curved Orange Anchor Label for "PRONAUTIC" spanning across the left sweep */}
           <text className="font-serif select-none fill-[#E04F34] text-[11px] font-black tracking-[0.16em]">
-            <textPath href="#circular-text-path" startOffset="3%" textAnchor="start">
+            <textPath href="#circular-text-path" startOffset="48.5%" textAnchor="end">
               PRONAUTIC
             </textPath>
           </text>
 
           {/* Curved Blue Anchor Label for "TRAINING CENTRE" spanning across the right sweep */}
           <text className="font-sans select-none fill-[#1D3D58] text-[8.5px] font-black tracking-[0.18em]">
-            <textPath href="#circular-text-path" startOffset="51%" textAnchor="start">
+            <textPath href="#circular-text-path" startOffset="51.5%" textAnchor="start">
               TRAINING CENTRE
             </textPath>
           </text>
