@@ -2,7 +2,7 @@ import React from "react";
 
 interface LogoProps {
   className?: string;
-  variant?: "full" | "compact" | "light" | "circular";
+  variant?: ull | compact | light | circular | icon;
 }
 
 export function PronauticLogo({ className = "h-14", variant = "full" }: LogoProps) {
@@ -95,7 +95,40 @@ export function PronauticLogo({ className = "h-14", variant = "full" }: LogoProp
   }
 
   // SVG with PRONAUTIC logo and COMPASS icon
-  if (variant === "compact") {
+  
+  if (variant === "icon") {
+    return (
+      <div className={className}>
+        <svg 
+          viewBox="0 0 100 100" 
+          className="w-full h-full text-[#1D3D58]" 
+          fill="none" 
+          stroke="currentColor" 
+          strokeWidth="1.5"
+        >
+          <circle cx="50" cy="50" r="42" className="stroke-[#1D3D58]" strokeWidth="2.5" />
+          <circle cx="50" cy="50" r="37" className="stroke-[#E04F34]/30" strokeDasharray="2 2" strokeWidth="1" />
+          <circle cx="50" cy="50" r="46" className="stroke-[#1D3D58]/15" strokeWidth="0.5" />
+          <path d="M50 50 L50 15 L54 35 Z" fill="#E04F34" stroke="#E04F34" strokeWidth="0.5" />
+          <path d="M50 50 L50 15 L46 35 Z" fill="#1D3D58" stroke="#1D3D58" strokeWidth="0.5" />
+          <path d="M50 50 L50 85 L46 65 Z" fill="#E04F34" stroke="#E04F34" strokeWidth="0.5" />
+          <path d="M50 50 L50 85 L54 65 Z" fill="#1D3D58" stroke="#1D3D58" strokeWidth="0.5" />
+          <path d="M50 50 L85 50 L65 54 Z" fill="#E04F34" stroke="#E04F34" strokeWidth="0.5" />
+          <path d="M50 50 L85 50 L65 46 Z" fill="#1D3D58" stroke="#1D3D58" strokeWidth="0.5" />
+          <path d="M50 50 L15 50 L35 46 Z" fill="#E04F34" stroke="#E04F34" strokeWidth="0.5" />
+          <path d="M50 50 L15 50 L35 54 Z" fill="#1D3D58" stroke="#1D3D58" strokeWidth="0.5" />
+          <path d="M50 50 L75 25 L65 35 Z" fill="#1D3D58/85" />
+          <path d="M50 50 L25 25 L35 35 Z" fill="#1D3D58/85" />
+          <path d="M50 50 L75 75 L65 65 Z" fill="#1D3D58/85" />
+          <path d="M50 50 L25 75 L35 65 Z" fill="#1D3D58/85" />
+          <circle cx="50" cy="50" r="5" fill="#E04F34" />
+          <circle cx="50" cy="50" r="2.5" fill="#FFFFFF" />
+        </svg>
+      </div>
+    );
+  }
+
+  if (variant === compact) {
     return (
       <div className={`flex items-center gap-2 ${className}`}>
         {/* Crisp Compass Rose icon */}

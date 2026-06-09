@@ -869,7 +869,7 @@ export default function DocGeneratorView(props: any) {
                           {/* Maritime School Branding Box */}
                           <div className="flex items-center gap-3 w-1/2">
                             <div className="bg-slate-900 p-1.5 rounded flex items-center justify-center shrink-0">
-                              <PronauticLogo className="w-10 h-10 text-white" />
+                              <PronauticLogo variant="icon" className="w-10 h-10 text-white" />
                             </div>
                             <div className="space-y-0.5">
                               <span className="text-[10px] font-black tracking-widest text-[#E04F34] uppercase font-mono">
