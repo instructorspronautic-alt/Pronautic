@@ -1338,6 +1338,15 @@ export function useAppLogic() {
     });
   };
 
+  const handleSaveStaff = useCallback((instructors: InstructorProfile[]) => {
+    setStaffDatabase(instructors);
+    if (!token) {
+      console.warn("No token available to save instructors");
+      return;
+    }
+    saveInstructors(token, instructors).catch(e => console.error("Error saving instructors:", e));
+  }, [token]);
+
   const handleToggleTaskStatus = async (taskId: string) => {
     const task = tasks.find((t) => t.id === taskId);
     if (!task) return;
@@ -2336,6 +2345,7 @@ return {
   handleLinkTask: handleLinkTask,
   handleUnlinkTask: handleUnlinkTask,
   handleUnlinkTaskCard: handleUnlinkTaskCard,
+  handleSaveStaff: handleSaveStaff,
   getEventTimes: getEventTimes,
   formatTime: formatTime,
   getEventInstructor: getEventInstructor,

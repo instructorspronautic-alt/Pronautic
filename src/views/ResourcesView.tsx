@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { InstructorProfile } from "../types";
 import { Layers } from "lucide-react";
-import { User, Search, Settings, FileText, CheckCircle2, Ticket, PackageOpen, Download, Filter, Eye, AlertCircle, Phone, Calendar, Clock, Lock, Ship, ArrowRight, Play, Edit3, Trash2, X } from "lucide-react";
+import { User, Search, Settings, FileText, CheckCircle2, Ticket, PackageOpen, Download, Filter, Eye, AlertCircle, Phone, Calendar, Clock, Lock, Ship, ArrowRight, Play, Edit3, Trash2, X, UserPlus } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Bar } from "recharts";
 
 export default function ResourcesView(props: any) {
-  const { needsAuth, isLoggingIn, user, token, events, taskLists, tasks, isLoadingData, errorText, analysis, isLoadingAnalysis, isExporting, exportSuccess, activeTab, showPrintWarning, docMonth, docYear, docTitle, docSubtitle, docCalFilter, docTypeFilter, docAulaFilter, docInstructorFilter, docSearchQuery, docExcludedIds, docFields, customDocFields, docHeaderFields, todayFormatted, showFeedbackAgent, feedbackText, isSendingFeedback, feedbackTickets, viewRange, focusDate, selectedEvent, eventTaskLinks, onlyShowRangeTasks, showOnlyCourses, selectedAulaFilter, calendarSubTab, tasksTabMode, searchTaskQuery, tasksRoleFilter, calendars, selectedCalIds, userRole, teacherEmailFilter, customTeacherEmail, availabilities, newAvailStart, newAvailEnd, newAvailNotes, editingAvailId, teacherQualifications, eventResources, eventOverrides, syncFrequency, lastSyncTime, aulas, embarcaciones, staffDatabase, isAdminModalOpen, setNeedsAuth, setIsLoggingIn, setUser, setToken, setEvents, setTaskLists, setTasks, setIsLoadingData, setErrorText, setAnalysis, setIsLoadingAnalysis, setIsExporting, setExportSuccess, setActiveTab, setShowPrintWarning, setDocMonth, setDocYear, setDocTitle, setDocSubtitle, setDocCalFilter, setDocTypeFilter, setDocAulaFilter, setDocInstructorFilter, setDocSearchQuery, setDocExcludedIds, setDocFields, setCustomDocFields, setDocHeaderFields, setTodayFormatted, setShowFeedbackAgent, setFeedbackText, setIsSendingFeedback, setFeedbackTickets, setViewRange, setFocusDate, setSelectedEvent, setEventTaskLinks, setOnlyShowRangeTasks, setShowOnlyCourses, setSelectedAulaFilter, setCalendarSubTab, setTasksTabMode, setSearchTaskQuery, setTasksRoleFilter, setCalendars, setSelectedCalIds, setUserRole, setTeacherEmailFilter, setCustomTeacherEmail, setAvailabilities, setNewAvailStart, setNewAvailEnd, setNewAvailNotes, setEditingAvailId, setTeacherQualifications, setEventResources, setEventOverrides, setSyncFrequency, setLastSyncTime, setAulas, setEmbarcaciones, setStaffDatabase, setIsAdminModalOpen, mergedEvents, sgcAlertStatus, monthEventCounts, teacherEmails, displayEvents, displayTasks, displayCourses, docFilteredEvents, dgmmAlerts, globalConflicts, handleAddAvailability, handleDeleteAvailability, handleSaveResources, handleToggleAuditTaskDashboard, handleUpdateEvent, getRangeConfig, navigateRange, handlePrintSGC, handleLinkTask, handleUnlinkTask, handleUnlinkTaskCard, getEventTimes, formatTime, getEventInstructor, getEventTeacherEmail, checkTeacherAvailability, formatEventDates, handleExportToSheets, triggerAIAnalysis, handleNavigate, handleToggleTaskStatus, handleToggleAuditTask, AUDIT_TASKS , setSelectedInstructorForCourses } = props;
+  const { handleSaveStaff, needsAuth, isLoggingIn, user, token, events, taskLists, tasks, isLoadingData, errorText, analysis, isLoadingAnalysis, isExporting, exportSuccess, activeTab, showPrintWarning, docMonth, docYear, docTitle, docSubtitle, docCalFilter, docTypeFilter, docAulaFilter, docInstructorFilter, docSearchQuery, docExcludedIds, docFields, customDocFields, docHeaderFields, todayFormatted, showFeedbackAgent, feedbackText, isSendingFeedback, feedbackTickets, viewRange, focusDate, selectedEvent, eventTaskLinks, onlyShowRangeTasks, showOnlyCourses, selectedAulaFilter, calendarSubTab, tasksTabMode, searchTaskQuery, tasksRoleFilter, calendars, selectedCalIds, userRole, teacherEmailFilter, customTeacherEmail, availabilities, newAvailStart, newAvailEnd, newAvailNotes, editingAvailId, teacherQualifications, eventResources, eventOverrides, syncFrequency, lastSyncTime, aulas, embarcaciones, staffDatabase, isAdminModalOpen, setNeedsAuth, setIsLoggingIn, setUser, setToken, setEvents, setTaskLists, setTasks, setIsLoadingData, setErrorText, setAnalysis, setIsLoadingAnalysis, setIsExporting, setExportSuccess, setActiveTab, setShowPrintWarning, setDocMonth, setDocYear, setDocTitle, setDocSubtitle, setDocCalFilter, setDocTypeFilter, setDocAulaFilter, setDocInstructorFilter, setDocSearchQuery, setDocExcludedIds, setDocFields, setCustomDocFields, setDocHeaderFields, setTodayFormatted, setShowFeedbackAgent, setFeedbackText, setIsSendingFeedback, setFeedbackTickets, setViewRange, setFocusDate, setSelectedEvent, setEventTaskLinks, setOnlyShowRangeTasks, setShowOnlyCourses, setSelectedAulaFilter, setCalendarSubTab, setTasksTabMode, setSearchTaskQuery, setTasksRoleFilter, setCalendars, setSelectedCalIds, setUserRole, setTeacherEmailFilter, setCustomTeacherEmail, setAvailabilities, setNewAvailStart, setNewAvailEnd, setNewAvailNotes, setEditingAvailId, setTeacherQualifications, setEventResources, setEventOverrides, setSyncFrequency, setLastSyncTime, setAulas, setEmbarcaciones, setStaffDatabase, setIsAdminModalOpen, mergedEvents, sgcAlertStatus, monthEventCounts, teacherEmails, displayEvents, displayTasks, displayCourses, docFilteredEvents, dgmmAlerts, globalConflicts, handleAddAvailability, handleDeleteAvailability, handleSaveResources, handleToggleAuditTaskDashboard, handleUpdateEvent, getRangeConfig, navigateRange, handlePrintSGC, handleLinkTask, handleUnlinkTask, handleUnlinkTaskCard, getEventTimes, formatTime, getEventInstructor, getEventTeacherEmail, checkTeacherAvailability, formatEventDates, handleExportToSheets, triggerAIAnalysis, handleNavigate, handleToggleTaskStatus, handleToggleAuditTask, AUDIT_TASKS , setSelectedInstructorForCourses } = props;
   
   const [editingStaff, setEditingStaff] = useState<InstructorProfile | null>(null);
   
@@ -278,7 +278,7 @@ export default function ResourcesView(props: any) {
                                         <button
                                           onClick={() => {
                                             if (window.confirm("¿Seguro que deseas dar de baja o eliminar este perfil?")) {
-                                              setStaffDatabase(
+                                              (handleSaveStaff || setStaffDatabase)(
                                                 staffDatabase.filter(
                                                   (s: InstructorProfile) => s.id !== staff.id,
                                                 ),
@@ -371,114 +371,22 @@ export default function ResourcesView(props: any) {
 
                           {/* New Instructor Form */}
                           {isAdmin && (
-                          <div className="mt-4 bg-white p-3 rounded border border-slate-200">
-                            <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">
-                              Añadir Nuevo Instructor
-                            </h4>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                              <input
-                                id="new-staff-branca"
-                                type="text"
-                                placeholder="Branca (ej. STCW)"
-                                className="border border-slate-200 rounded p-1.5 text-xs outline-none focus:border-indigo-400"
-                              />
-                              <input
-                                id="new-staff-name"
-                                type="text"
-                                placeholder="* Nombre Completo"
-                                className="border border-slate-200 rounded p-1.5 text-xs outline-none focus:border-indigo-400"
-                              />
-                              <input
-                                id="new-staff-cat"
-                                type="text"
-                                placeholder="Categoría (ej. Capitán)"
-                                className="border border-slate-200 rounded p-1.5 text-xs outline-none focus:border-indigo-400"
-                              />
-                              <input
-                                id="new-staff-phone"
-                                type="text"
-                                placeholder="Teléfono"
-                                className="border border-slate-200 rounded p-1.5 text-xs outline-none focus:border-indigo-400"
-                              />
-                              <input
-                                id="new-staff-email"
-                                type="email"
-                                placeholder="Email"
-                                className="border border-slate-200 rounded p-1.5 text-xs outline-none focus:border-indigo-400"
-                              />
-                              <input
-                                id="new-staff-loc"
-                                type="text"
-                                placeholder="Ubicación"
-                                className="border border-slate-200 rounded p-1.5 text-xs outline-none focus:border-indigo-400"
-                              />
-                              <input
-                                id="new-staff-courses"
-                                type="text"
-                                placeholder="Cursos (ej. PNB, PER)"
-                                className="border border-slate-200 rounded p-1.5 text-xs outline-none focus:border-indigo-400"
-                              />
-                              <div className="col-span-2 md:col-span-3 flex items-end">
-                                <button
-                                  onClick={() => {
-                                    const brancaInput = document.getElementById(
-                                      "new-staff-branca",
-                                    ) as HTMLInputElement;
-                                    const nameInput = document.getElementById(
-                                      "new-staff-name",
-                                    ) as HTMLInputElement;
-                                    const catInput = document.getElementById(
-                                      "new-staff-cat",
-                                    ) as HTMLInputElement;
-                                    const phoneInput = document.getElementById(
-                                      "new-staff-phone",
-                                    ) as HTMLInputElement;
-                                    const emailInput = document.getElementById(
-                                      "new-staff-email",
-                                    ) as HTMLInputElement;
-                                    const locInput = document.getElementById(
-                                      "new-staff-loc",
-                                    ) as HTMLInputElement;
-                                    const coursesInput = document.getElementById(
-                                      "new-staff-courses",
-                                    ) as HTMLInputElement;
-
-                                    if (nameInput && nameInput.value.trim()) {
-                                      const newStaff: InstructorProfile = {
-                                        id: "staff-" + Date.now(),
-                                        branca: brancaInput.value.trim(),
-                                        name: nameInput.value.trim(),
-                                        category: catInput.value.trim(),
-                                        phone: phoneInput.value.trim(),
-                                        email: emailInput.value.trim(),
-                                        location: locInput.value.trim(),
-                                        courses: coursesInput?.value.trim() || undefined,
-                                      };
-                                      setStaffDatabase([
-                                        newStaff,
-                                        ...staffDatabase,
-                                      ]);
-
-                                      // Clear inputs
-                                      brancaInput.value = "";
-                                      nameInput.value = "";
-                                      catInput.value = "";
-                                      phoneInput.value = "";
-                                      emailInput.value = "";
-                                      locInput.value = "";
-                                      if (coursesInput) coursesInput.value = "";
-                                    } else {
-                                      alert(
-                                        "El nombre del instructor es obligatorio.",
-                                      );
-                                    }
-                                  }}
-                                  className="w-full bg-indigo-600 text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-indigo-700"
-                                >
-                                  Guardar Instructor
-                                </button>
-                              </div>
-                            </div>
+                          <div className="mt-4 flex justify-end">
+                            <button
+                              onClick={() => setEditingStaff({
+                                id: "staff-" + Date.now(),
+                                branca: "",
+                                name: "",
+                                email: "",
+                                phone: "",
+                                category: "",
+                                location: ""
+                              })}
+                              className="bg-indigo-600 text-white px-4 py-2 rounded text-xs font-bold hover:bg-indigo-700 flex items-center gap-2"
+                            >
+                              <UserPlus className="w-4 h-4" />
+                              Añadir Nuevo Docente
+                            </button>
                           </div>
                           )}
                         </div>
@@ -492,7 +400,7 @@ export default function ResourcesView(props: any) {
             <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
               <h3 className="font-bold text-slate-800 flex items-center gap-2">
                 <Edit3 className="w-4 h-4 text-indigo-600" />
-                Editar Perfil Docente
+                {editingStaff.id.startsWith("staff-") && !staffDatabase.some((s: InstructorProfile) => s.id === editingStaff.id) ? "Añadir Nuevo Docente" : "Editar Perfil Docente"}
               </h3>
               <button
                 onClick={() => setEditingStaff(null)}
@@ -592,9 +500,9 @@ export default function ResourcesView(props: any) {
                   
                   const isExisting = staffDatabase.some((s: InstructorProfile) => s.id === editingStaff.id);
                   if (isExisting) {
-                    setStaffDatabase(staffDatabase.map((s: InstructorProfile) => s.id === editingStaff.id ? editingStaff : s));
+                    (handleSaveStaff || setStaffDatabase)(staffDatabase.map((s: InstructorProfile) => s.id === editingStaff.id ? editingStaff : s));
                   } else {
-                    setStaffDatabase([...staffDatabase, editingStaff]);
+                    (handleSaveStaff || setStaffDatabase)([...staffDatabase, editingStaff]);
                   }
                   
                   setEditingStaff(null);
